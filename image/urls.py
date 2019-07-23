@@ -20,7 +20,7 @@ from rest_framework.routers import DefaultRouter
 from apps.app_resizer.views import ImageViewSet
 
 router = DefaultRouter()
-router.register('image', ImageViewSet, base_name='images')
+router.register('images', ImageViewSet, base_name='images')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

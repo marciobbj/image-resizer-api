@@ -11,6 +11,10 @@ class ImageSerializer(serializers.ModelSerializer):
 
     valid_file_types = ['png', 'jpeg', 'jpg']
 
+    def create(self, validated_data):
+        image = Image.objects.create(**validated_data)
+        return image
+
     def validate_file(self, file):
         valid_format = [
             acceptable_format in file.name

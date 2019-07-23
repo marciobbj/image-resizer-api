@@ -1,21 +1,24 @@
-from rest_framework import viewsets
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.parsers import FileUploadParser
+from rest_framework import viewsets, mixins, status
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from apps.app_resizer.models import Image
 from apps.app_resizer.serializers import ImageSerializer
 
 
-class ImageViewSet(viewsets.GenericViewSet):
+class ImageViewSet(
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet
+):
     serializer_class = ImageSerializer
-    parser_classes = FileUploadParser
+    parser_classes = MultiPartParser,
 
     def get_queryset(self):
         return Image.objects.all()
 
-    @action(detail=True, methods=['POST'])
-    def create_job(self, request, *args, **kwargs):
-        file = request.data.get('file')
-        return Response(status=status.HTTP_201_CREATED)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
