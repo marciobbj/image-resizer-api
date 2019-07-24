@@ -1,19 +1,26 @@
 from rest_framework import serializers
 
 from apps.app_resizer.models import Image
+from image.celery import resize_job
 
 
 class ImageSerializer(serializers.ModelSerializer):
+
+    valid_file_types = ['png', 'jpeg', 'jpg']
 
     class Meta:
         model = Image
         fields = '__all__'
 
-    valid_file_types = ['png', 'jpeg', 'jpg']
-
     def create(self, validated_data):
+        resize_to = {
+            'width': validated_data.get('width'),
+            'height': validated_data.get('height')
+        }
         image = Image.objects.create(**validated_data)
-        return image
+
+        resize_job.delay(file_id=image.id, resize_to=resize_to)
+        return validated_data
 
     def validate_file(self, file):
         valid_format = [
