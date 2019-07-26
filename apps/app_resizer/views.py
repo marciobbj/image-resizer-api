@@ -8,6 +8,7 @@ from apps.app_resizer.serializers import ImageSerializer
 
 class ImageViewSet(
     mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
     viewsets.GenericViewSet
 ):
     serializer_class = ImageSerializer
@@ -20,4 +21,4 @@ class ImageViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)

@@ -8,7 +8,7 @@ class Image(models.Model):
     file = models.FileField()
     width = models.IntegerField()
     height = models.IntegerField()
-
+    job_done = models.BooleanField(default=False)
     resized_image = models.FileField(null=True)
 
     def __str__(self):

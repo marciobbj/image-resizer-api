@@ -16,9 +16,8 @@ class ImageTestCase(APITestCase):
     genero, os testes não irão interferir
     nesse ambiente.
     """
-
     @patch('apps.app_resizer.serializers.Image.save')
-    @patch('apps.app_resizer.serializers.resize_job')
+    @patch('apps.app_resizer.serializers.resize_job.delay')
     def test_users_can_upload_image(self, resize_job_mock, saving_mock):
         saving_mock.return_value = True
         img = File(file=BytesIO(b'ImageMock'), name='test.jpg')

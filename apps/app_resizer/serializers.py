@@ -20,7 +20,7 @@ class ImageSerializer(serializers.ModelSerializer):
         image = Image.objects.create(**validated_data)
 
         resize_job.delay(file_id=image.id, resize_to=resize_to)
-        return validated_data
+        return image
 
     def validate_file(self, file):
         valid_format = [
