@@ -8,7 +8,7 @@ from celery import Celery, shared_task
 # set the default Django settings module for the 'celery' program.
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'image.settings')
-app = Celery('image', broker='pyamqp://guest@localhost//')
+app = Celery('image', broker='pyamqp://guest@rabbitmq//')
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
@@ -44,6 +44,7 @@ def resize_job(file_id: int, resize_to: dict) -> bool:
 
     # Save it to the db
     image_object.resized_image = File(file=open(out_file_path, mode='rb'), name=f'{image_object.name}-OUT.jpg')
+    image_object.job_done = True
     image_object.save()
 
     # Remove the file created and just
