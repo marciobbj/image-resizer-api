@@ -27,7 +27,7 @@ class ImageTestCase(APITestCase):
             'width': 100,
             'height': 200
         }
-        response = self.client.post('/images/', request_payload, follow=True)
+        response = self.client.post('/api/images/', request_payload, follow=True)
         self.assertEqual(response.status_code, 201)
         saving_mock.assert_called_once()
         resize_job_mock.assert_called_once()
@@ -40,5 +40,5 @@ class ImageTestCase(APITestCase):
             'width': 100,
             'height': 200
         }
-        response = self.client.post('/images/', request_payload, follow=True)
+        response = self.client.post('/api/images/', request_payload, follow=True)
         self.assertEqual(response.status_code, 400)
