@@ -20,7 +20,7 @@ gunicorn==19.9.0
 idna==2.7
 jsonschema==2.6.0
 kombu==4.6.3
-numpy==1.16.4
+numpy==1.22.0
 opencv-python==4.1.0.25
 paramiko==2.6.0
 pycparser==2.19
